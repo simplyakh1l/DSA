@@ -1,23 +1,10 @@
 class Solution {
 public:
-    int t[101][101][601];
-    int sol(vector<int>&z,vector<int> &v,int zl,int vl,int n){
-        if(zl==0 && vl==0)return 0;
-        if(n==0)return 0;
-        if(t[zl][vl][n]!=-1)return t[zl][vl][n];
-        if(z[n-1]<=zl && v[n-1]<=vl){
-            int inc=1+sol(z,v,zl-z[n-1],vl-v[n-1],n-1);
-            int exc=sol(z,v,zl,vl,n-1);
-            return t[zl][vl][n]=max(inc,exc);
-        }
-        else return t[zl][vl][n]=sol(z,v,zl,vl,n-1);
-    }
     int findMaxForm(vector<string>& s, int zl, int vl) {
-        memset(t,-1,sizeof(t));
         int n=s.size();
+
         vector<int>z(n);
         vector<int>v(n);
-
         for(int i=0;i<n;i++){
             int zcnt=0;
             int vcnt=0;
@@ -29,11 +16,35 @@ public:
             v[i]=vcnt;
         }
 
-        int ans=sol(z,v,zl,vl,n);
-        return ans;
+        int t[n+1][zl+1][vl+1];
 
+        for(int j=0;j<zl+1;j++){
+            for(int k=0;k<vl+1;k++){
+                t[0][j][k]=0;
+            }
+        }
 
+        for(int i=1;i<n+1;i++){
+            for(int j=0;j<zl+1;j++){
+                for(int k=0;k<vl+1;k++){
+                    if(z[i-1]<=j && v[i-1]<=k){
+                        int inc=1+t[i-1][j-z[i-1]][k-v[i-1]];
+                        int exc=t[i-1][j][k];
+                        t[i][j][k]=max(inc,exc);
+                    }
+                    else t[i][j][k]=t[i-1][j][k];
+                }
+            }
+        }
+        return t[n][zl][vl];
         
+
+
+
+
+
+
+
         
     }
 };
