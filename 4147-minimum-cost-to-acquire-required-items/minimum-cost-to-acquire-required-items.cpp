@@ -32,8 +32,8 @@ public:
     }
     long long minimumCost(int c1, int c2, int c3, int N1, int N2) {
         long long a1=sol(c1,c2,c3,N1,N2);
-        
-        return a1;
+        long long a2=sol(c2,c1,c3,N2,N1);
+        return min(a1,a2);
         
         
     }
